@@ -157,6 +157,10 @@ public class View extends Observable {
             frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame2.setLayout(new GridLayout(8,1));
             frame2.setSize(600, 400);
+            label3.setFont(label3.getFont().deriveFont(16.0f)); // ajustez la taille de police
+            Rounder_button(button3);
+
+
             panelboutton_frame2.add(button3);
             frame2.add(panelboutton_frame2);
             frame2.add(label3);
