@@ -7,14 +7,21 @@ import java.util.Observer;
 
 public class Controller implements Observer {
     View view = new View();
+   Model model=new Model();
+
     @Override
     public void update(Observable o, Object arg) {
 
     }
 
    Controller(){
-
+      // inialisation_Select_COM();
    }
+
+   public void inialisation_Select_COM(){
+      view.setOptions(model.arduinoport());
+   }
+
 
    public void demarrer(){
         //creation du graphe de l' evolution de la temperature en fonction du temps (S)
@@ -31,8 +38,14 @@ public class Controller implements Observer {
         public void actionPerformed(ActionEvent e) {
             // Code à exécuter lorsque le bouton valider  est appuyé
             // recuperer la valeur entrer dans l' imput 1 de l'interface
-            int valeur1 = Integer.parseInt(view.getTextPane().getText());
-            //...
+            try {
+
+                int valeur1 = Integer.parseInt(view.getTextPane().getText());
+                //...
+            }catch (NumberFormatException a){
+                view.alerte("Veuillez entrer un nombre");
+
+            }
         }
     });
 

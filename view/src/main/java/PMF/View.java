@@ -1,6 +1,8 @@
 package PMF;
 
 import javax.swing.*;
+import java.util.Enumeration;
+
 import java.awt.*;
 import java.util.Observable;
 import org.jfree.chart.*;
@@ -41,7 +43,7 @@ public class View extends Observable {
 
     JButton   button3 =new JButton("Retour au menu");
 
-    String[] options={"COM1","COM2","COM3","COM4","COM5"};
+    String[] options={"COM1","COM2","COM3","COM5"};
     JComboBox<String> select =new JComboBox<>(options);
 
 
@@ -224,5 +226,9 @@ public class View extends Observable {
 
     public void setVisible_Frame2(Boolean t){
         this.frame2.setVisible(t);
+    }
+
+    public void setOptions(String[] options) {
+        this.options = options;
     }
 }
