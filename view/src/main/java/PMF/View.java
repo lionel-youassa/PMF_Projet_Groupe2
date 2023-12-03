@@ -19,8 +19,7 @@ public class View extends Observable {
     JLabel label1 = new JLabel("Temperature de consigne:");
     JLabel label2 = new JLabel("Choix du port de connection arduino");
     JLabel label3 = new JLabel("Consulter vos alertes ici ");
-    JPanel panel_parent_left=new JPanel();
-    JPanel panel_parent_right=new JPanel();
+    JPanel backgroundPanel = new JPanel(new GridLayout(1,2));
     JPanel panel_left = new JPanel(new GridLayout(6,1));
     JPanel panel_right = new JPanel(new GridLayout(1,2));
     JPanel panel_label1=new JPanel(new BorderLayout());
@@ -65,7 +64,7 @@ public class View extends Observable {
             long timeInSeconds = instant.toEpochMilli() / 1000;
 
             // ajout des données pour la courbe
-            series.add(timeInSeconds, Integer.parseInt(T));
+            series.add(i+20, Integer.parseInt(T));
         }
         //}
 
@@ -108,6 +107,14 @@ public class View extends Observable {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new GridLayout(1,2));
             frame.setSize(880, 480);
+
+
+            panel_input.setBackground(new Color(175, 238, 238));
+            panel_vide1.setBackground(new Color(175, 238, 238));
+            panel_select.setBackground(new Color(175, 238, 238));
+            panel_boutton.setBackground(new Color(175, 238, 238));
+            panel_left.setBackground(new Color(175, 238, 238));
+
             panel_label1.setLayout(new FlowLayout(FlowLayout.LEFT));
             panel_input.setLayout(null);
             panel_label2.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -115,9 +122,8 @@ public class View extends Observable {
             panel_select.setLayout(null);
             panel_boutton.setLayout(null);
 
-            panel_parent_left.add(panel_left);
-            panel_parent_right.add(panel_right);
-
+            backgroundPanel.add(panel_left);
+            backgroundPanel.add(panel_right);
 
 
             panel_left.add(panel_input);
@@ -140,9 +146,7 @@ public class View extends Observable {
             panel_boutton.add(button2);
 
 
-            //frame.add(panel_alerte);
-            frame.add(panel_left);
-            frame.add(panel_right);
+            frame.add(backgroundPanel);
             frame.setLocationRelativeTo(null);
            // frame.pack();
             frame.setVisible(true);
@@ -183,6 +187,9 @@ public class View extends Observable {
 
 
         }
+
+
+
 
 
 
