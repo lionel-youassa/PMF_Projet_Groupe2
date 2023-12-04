@@ -43,9 +43,9 @@ public class View extends Observable {
 
     JButton   button3 =new JButton("Retour au menu");
 
-    String[] options={"COM1","COM2","COM3","COM5"};
-    JComboBox<String> select =new JComboBox<>(options);
+    String[] options=new String[4];
 
+    JComboBox<String> select =new JComboBox<>(this.options);
 
     // Création du panneau de visualisation du graphique
      ChartPanel chartPanel;
@@ -66,7 +66,7 @@ public class View extends Observable {
             long timeInSeconds = instant.toEpochMilli() / 1000;
 
             // ajout des données pour la courbe
-            series.add(i+20, Integer.parseInt(T));
+            series.add(i+2044, Integer.parseInt(T));
         }
         //}
 
@@ -229,6 +229,20 @@ public class View extends Observable {
     }
 
     public void setOptions(String[] options) {
-        this.options = options;
+        for (int i=0; i<options.length; i++) {
+            this.options[i] = options[i];
+        }
+         this.select =new JComboBox<>(this.options);
+
+    }
+    public void notificationInfo(String message){
+        JOptionPane.showMessageDialog(panel_left, message,
+
+                "Notification", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void notificationErro(String message){
+        JOptionPane.showMessageDialog(panel_left, message,
+                "Erreure", JOptionPane.ERROR_MESSAGE);
     }
 }

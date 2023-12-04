@@ -10,6 +10,45 @@
     </parent>
 
     <artifactId>controller</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>PMF</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>PMF</groupId>
+            <artifactId>view</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>PMF</groupId>
+            <artifactId>view</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-XDignore.symbol.file</arg>
+                    </compilerArgs>
+                    <excludes>
+                        <exclude>path.to.controller.package/**</exclude>
+                        <exclude>path.to.model.package/**</exclude>
+                        <exclude>path.to.view.package/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
