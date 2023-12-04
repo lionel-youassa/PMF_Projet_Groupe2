@@ -1,31 +1,47 @@
 package PMF;
+import com.fazecast.jSerialComm.SerialPort;
 
+import javax.swing.*;
 
-import java.util.Enumeration;
-import gnu.io.CommPortIdentifier;
 
 public class Model {
-Model(){
+    Model(){
+    }
+    SerialPort[] ports = SerialPort.getCommPorts();
+    View view=new View();
+        public  String[] list_ports(){
+            String[] name_ports= new String[ports.length];
+            int i=0;
 
-}
-    public String[] arduinoport() {
-        String[] arduinoPorts = new String[0];
-        int i=0;
-        Enumeration portList = CommPortIdentifier.getPortIdentifiers();
-        while (portList.hasMoreElements()) {
-            CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
-            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+            //System.out.println("Ports série disponibles:");
+            for (SerialPort port : ports) {
 
-                    arduinoPorts[i]=portId.getName();
-                    i++;
+                name_ports[i]=port.getSystemPortName();
+                //System.out.println(name_ports[i]);
+                i++;
+            }
+            return name_ports;
 
             }
-        }
+             public void connect_ports(String PORT){
+                 SerialPort selectedPort;
+                 for (SerialPort port : ports) {
+                    if(PORT==port.getSystemPortName()) {
+                            selectedPort=port;
+                        if (selectedPort.openPort()) {
+                            System.out.println(selectedPort.getSystemPortName());
+                            view.notificationInfo("Port série ouvert avec succès !");
+                        } else {
+                            view.notificationErro("Impossible d'ouvrir le port série.");
+                        }
+                        break;
+                     }
+                    }
+                }
 
-        return arduinoPorts;
-    }
 
-    private static boolean isArduino(CommPortIdentifier portId) {
-        return true;
-    }
+
+
+
+
 }

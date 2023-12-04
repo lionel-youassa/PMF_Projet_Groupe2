@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
-
+import PMF.View;
 public class Controller implements Observer {
-    View view = new View();
+    View view= new View();
    Model model=new Model();
 
     @Override
@@ -15,11 +15,11 @@ public class Controller implements Observer {
     }
 
    Controller(){
-      // inialisation_Select_COM();
+    inialisation_Select_COM();
    }
 
    public void inialisation_Select_COM(){
-      view.setOptions(model.arduinoport());
+      view.setOptions(model.list_ports());
    }
 
 
@@ -69,8 +69,9 @@ public class Controller implements Observer {
             public void actionPerformed(ActionEvent e) {
                 // Code à exécuter lorsque le selecte est appuyé
                 // Récupérer la valeur sélectionnée
-                String selectedOption = (String) view.getSelect().getSelectedItem();
 
+                String selectedOption = (String) view.getSelect().getSelectedItem();
+                model.connect_ports(selectedOption);
                 //...
             }
         });
