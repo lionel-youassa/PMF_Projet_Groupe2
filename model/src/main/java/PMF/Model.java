@@ -8,11 +8,20 @@ import java.util.Random;
 
 
 public class Model {
-    Model(){
-    }
     SerialPort[] ports = SerialPort.getCommPorts();// liste des port COM
     SerialPort selectedPort;//port de connection a la carte arduino
-    View view=new View();
+
+    private static Model model;
+    Model(){
+    }
+        public static Model getModel(){
+            if(model== null){
+                model=new Model();
+            }
+            return model;
+
+        }
+
         public  String[] list_ports(){
             String[] name_ports= new String[ports.length];
             int i=0;
@@ -45,17 +54,17 @@ public class Model {
 
                     // Paramétrage  du débit de transmission et ouverture de la connexion série
                     if(selectedPort==null){
-                        view.alerte("Veuillez selectioner un port");
+                        View.getView().alerte("Veuillez selectioner un port");
 
                     }else {
                     selectedPort.setBaudRate(9600); // débit de transmission
 
                     if (selectedPort.openPort()) {
                         System.out.println(selectedPort.getSystemPortName());
-                        view.notificationInfo("Port série ouvert avec succès !");
+                        View.getView().notificationInfo("Port série ouvert avec succès !");
 
                     } else {
-                        view.notificationErro("Impossible d'ouvrir le port série.");
+                        View.getView().notificationErro("Impossible d'ouvrir le port série.");
 
                     }
 
@@ -67,11 +76,11 @@ public class Model {
                     try {
                         outputStream.write(dataToSend.getBytes());
                         outputStream.flush();
-                        view.notificationInfo("Informations insérées avec succès.");
+                        View.getView().notificationInfo("Informations insérées avec succès.");
                         // Fermer la connexion série
                         selectedPort.closePort();
                     } catch (Exception e) {
-                        view.notificationErro("Erreur lors de l'insertion des informations : " );
+                        View.getView().notificationErro("Erreur lors de l'insertion des informations : " );
                         System.out.println(e.getMessage());
                         // Fermer la connexion série
                         selectedPort.closePort();

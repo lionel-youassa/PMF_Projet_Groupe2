@@ -1,10 +1,12 @@
 package PMF;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
+
+
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 
 import org.jfree.chart.*;
@@ -14,12 +16,11 @@ import org.jfree.data.xy.*;
 
 
 import java.time.Instant;
-import java.util.Observer;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
-public class View extends Observable {
+
+public class View {
 
 
 
@@ -68,11 +69,18 @@ public class View extends Observable {
             double[] yData2 = {1, 4, 2, 3, 8};// Valeurs y pour la deuxième courbe
             double[] yData3 = {2, 3, 4, 1, 5};// Valeurs y pour la troisiemme courbe
 
-
+private static View view;
     View(){
 
     }
 
+    public static View getView(){
+        if (view == null) {
+            view = new View();
+        }
+        return view;
+
+    }
 
 
 
@@ -194,6 +202,8 @@ public class View extends Observable {
            // frame.pack();
             frame.setVisible(true);
 
+
+
             //creation de l'interface des alertes
             IHM_alertes();
         }
@@ -294,8 +304,7 @@ public class View extends Observable {
         for(int i=0; i<=yData3.length-1;i++) {
             this.yData3[i]=T;
             System.out.println("toto"+yData3[i]);
-            setChanged();
-            notifyObservers();
+
 
         }
 
@@ -305,8 +314,7 @@ public class View extends Observable {
 
             this.xData[0] = T;
             System.out.println("toto"+xData[0]);
-            setChanged();
-            notifyObservers();
+
 
         }
 
@@ -318,8 +326,6 @@ public class View extends Observable {
 
     public void setyData1(float T) {
             this.yData1[0]=T;
-            setChanged();
-            notifyObservers();
 
         //this.yData1 = Data;
 
@@ -328,8 +334,7 @@ public class View extends Observable {
 
     public void setyData2(float T) {
             this.yData2[0]=T;
-            setChanged();
-            notifyObservers();
+
         }
         //this.yData2 = Data;
 
@@ -350,5 +355,9 @@ public class View extends Observable {
 
     public double[] getyData2() {
         return yData2;
+    }
+
+    public  void  updateView(){
+        IHM();
     }
 }
