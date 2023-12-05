@@ -1,14 +1,20 @@
 package PMF;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import java.awt.*;
 import java.util.Observable;
+
 import org.jfree.chart.*;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.*;
 import org.jfree.data.xy.*;
+
+
 import java.time.Instant;
+import java.util.Observer;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -16,7 +22,8 @@ import javax.swing.border.EmptyBorder;
 public class View extends Observable {
 
 
-     JFrame frame =new JFrame("Manager_PMF");
+
+    JFrame frame =new JFrame("Manager_PMF");
     JFrame frame2 =new JFrame("PMF_Alertes");
     JLabel label1 = new JLabel("Temperature de consigne:");
     JLabel label2 = new JLabel("Choix du port de connection arduino");
@@ -49,34 +56,61 @@ public class View extends Observable {
 
     // Création du panneau de visualisation du graphique
      ChartPanel chartPanel;
-    View() {
+
+     // Creation du tableau des Y de la temperature de consigne
+    float T_Embiante , T_Frigo;
+
+    // Création des données pour les trois courbes du graphe dans la vue
+
+            double[] xData = {1, 2, 3, 4, 5}; // Valeurs x communes pour les trois courbes
+
+            double[] yData1 = {2, 4, 6, 8, 10}; // Valeurs y pour la première courbe
+            double[] yData2 = {1, 4, 2, 3, 8};// Valeurs y pour la deuxième courbe
+            double[] yData3 = {2, 3, 4, 1, 5};// Valeurs y pour la troisiemme courbe
+
+
+    View(){
 
     }
 
-    public void create_Graph(String T) {
+
+
+
+
+
+    public void create_Graph(  double[] xData,double[] yData1,double[] yData2,double[] yData3) {
 
         // Création de la variable contenant les données pour la courbe
         XYSeries series = new XYSeries("Courbe");
 
        // while (T != "0") {
-        for (int i=10 ; i!=0;i--) { // il faut en lever seulement pour le test
-            T=String.valueOf(i);
+
             Instant instant = Instant.now(); // Temps instantané actuel
 
-            long timeInSeconds = instant.toEpochMilli() / 1000;
 
-            // ajout des données pour la courbe
-            series.add(i+2044, Integer.parseInt(T));
-        }
+        // Création des données pour les trois courbes
+        //double[] xData = {1, 2, 3, 4, 5}; // Valeurs x communes pour les trois courbes
+
+        //double[] yData1 = {2, 4, 6, 8, 10}; // Valeurs y pour la première courbe
+       // double[] yData2 = {1, 4, 2, 3, 8};// Valeurs y pour la deuxième courbe
+
+
+
+
+
+
         //}
 
-            // Création du dataset avec la série de données
-            XYSeriesCollection dataset = new XYSeriesCollection();
-            dataset.addSeries(series);
+            // Création du jeu de données
+            DefaultXYDataset dataset = new DefaultXYDataset();
+            dataset.addSeries("Temperature embiante", new double[][] { xData, yData1 });
+            dataset.addSeries("Temperature du frigo", new double[][] { xData, yData2 });
+            dataset.addSeries("Temperature de consigne", new double[][] { xData, yData3 });
+
 
             // Création du graphique avec le dataset
             JFreeChart chart = ChartFactory.createXYLineChart(
-                    "Evolution de la temperature en fonction du temps(S)", // Titre du graphique
+                    "Evolution des temperatures en fonction du temps(S)", // Titre du graphique
                     "X", // Titre de l'axe des abscisses
                     "Y", // Titre de l'axe des ordonnées
                     dataset, // Dataset contenant les données
@@ -85,12 +119,17 @@ public class View extends Observable {
                     true, // Infobulles activées
                     false // URLs cliquables
             );
+
+        // Personnalisation du graphique si nécessaire
+        XYPlot plot = chart.getXYPlot();
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setAutoRangeIncludesZero(false); // Empêche l'axe des ordonnées
         chartPanel = new ChartPanel(chart);
         }
 
         // interface d' Administration du frigo
         public void IHM(){
-
+            backgroundPanel.removeAll();
             textPane.setPreferredSize(new Dimension(100,20));
             //select.setPreferredSize(new Dimension(100,20));
             label1.setBounds(5,8,200,20);
@@ -108,7 +147,7 @@ public class View extends Observable {
             panel_vide1.setSize(20,20);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new GridLayout(1,2));
-            frame.setSize(880, 480);
+            frame.setSize(896, 500);
 
 
             panel_input.setBackground(new Color(175, 238, 238));
@@ -133,6 +172,8 @@ public class View extends Observable {
             panel_left.add(panel_select);
             panel_left.add(panel_boutton);
 
+            create_Graph(getxData(), getyData1(), getyData2(), getyData3());
+            panel_right.removeAll();
             panel_right.add(chartPanel);
             panel_right.setBackground(Color.green);
 
@@ -152,6 +193,9 @@ public class View extends Observable {
             frame.setLocationRelativeTo(null);
            // frame.pack();
             frame.setVisible(true);
+
+            //creation de l'interface des alertes
+            IHM_alertes();
         }
 
         // interface des alertes
@@ -244,5 +288,67 @@ public class View extends Observable {
     public void notificationErro(String message){
         JOptionPane.showMessageDialog(panel_left, message,
                 "Erreure", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void setyData3(float T) {
+        for(int i=0; i<=yData3.length-1;i++) {
+            this.yData3[i]=T;
+            System.out.println("toto"+yData3[i]);
+            setChanged();
+            notifyObservers();
+
+        }
+
+    }
+
+    public void setxData(float T) {
+
+            this.xData[0] = T;
+            System.out.println("toto"+xData[0]);
+            setChanged();
+            notifyObservers();
+
+        }
+
+
+
+
+
+
+
+    public void setyData1(float T) {
+            this.yData1[0]=T;
+            setChanged();
+            notifyObservers();
+
+        //this.yData1 = Data;
+
+
+    }
+
+    public void setyData2(float T) {
+            this.yData2[0]=T;
+            setChanged();
+            notifyObservers();
+        }
+        //this.yData2 = Data;
+
+
+
+
+    public double[] getyData3() {
+        return yData3;
+    }
+
+    public double[] getxData() {
+        return xData;
+    }
+
+    public double[] getyData1() {
+        return yData1;
+    }
+
+    public double[] getyData2() {
+        return yData2;
     }
 }
